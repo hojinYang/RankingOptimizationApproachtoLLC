@@ -56,9 +56,11 @@ def load_yaml(path, key='parameters'):
 def find_best_hyperparameters(folder_path, meatric):
     csv_files = [join(folder_path, f) for f in listdir(folder_path)
                  if isfile(join(folder_path, f)) and f.endswith('.csv')]
+    print(folder_path)
     best_settings = []
     for record in csv_files:
         df = pd.read_csv(record)
+
         df[meatric+'_Score'] = df[meatric].map(lambda x: literal_eval(x)[0])
         best_settings.append(df.loc[df[meatric+'_Score'].idxmax()].to_dict())
 

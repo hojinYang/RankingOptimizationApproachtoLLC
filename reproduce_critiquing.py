@@ -26,6 +26,7 @@ def main(args):
 
     R_test = load_numpy(path=args.data_dir, name=args.test_set)
     print("Test U-I Dimensions: {}".format(R_test.shape))
+    R_test = R_test >= 4
 
     R_train_keyphrase = load_numpy(path=args.data_dir, name=args.train_keyphrase_set).toarray()
     print("Train Item Keyphrase U-I Dimensions: {}".format(R_train_keyphrase.shape))
@@ -33,14 +34,19 @@ def main(args):
     R_train_item_keyphrase = load_numpy(path=args.data_dir, name=args.train_item_keyphrase_set).toarray()
 
     table_path = load_yaml('config/global.yml', key='path')['tables']
-    parameters = find_best_hyperparameters(table_path+args.dataset_name, 'NDCG')
-    parameters_row = parameters.loc[parameters['model'] == args.model]
+    #parameters = find_best_hyperparameters(table_path+args.dataset_name, 'NDCG')
+    #parameters_row = parameters.loc[parameters['model'] == args.model]
 
-    if args.dataset_name == "yelp/":
-        R_train_item_keyphrase = R_train_item_keyphrase.T
+    # if args.dataset_name == "yelp/":
+    #    R_train_item_keyphrase = R_train_item_keyphrase.T
 
     start_time = time.time()
 
+    parameters_row = {
+        'iter': 4,
+        'lambda': 80,
+        'rank': 50
+    }
 
     results = critiquing(matrix_Train=R_train,
                          matrix_Test=R_test,

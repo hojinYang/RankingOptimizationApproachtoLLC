@@ -29,16 +29,20 @@ def main(args):
     print("Train Item Keyphrase U-I Dimensions: {}".format(R_train_keyphrase.shape))
 
     R_train_item_keyphrase = load_numpy(path=args.data_dir, name=args.train_item_keyphrase_set).toarray()
+    print(R_train_item_keyphrase.shape)
 
     table_path = load_yaml('config/global.yml', key='path')['tables']
-    parameters = find_best_hyperparameters(table_path+args.dataset_name, 'NDCG')
-    parameters_row = parameters.loc[parameters['model'] == args.model]
+    #parameters = find_best_hyperparameters(table_path+args.dataset_name, 'NDCG')
+    #parameters_row = parameters.loc[parameters['model'] == args.model]
+    parameters_row = {
+        'iter': 4,
+        'lambda': 80,
+        'rank': 128
+    }
 
     lambs = [0.001, 0.01, 0.05, 0.1, 0.5, 1, 5, 10, 30, 50, 70, 90, 100, 200, 500, 1000, 10000, 100000]
-    topks = [10,20,50,100]
+    topks = [10]
 
-    if args.dataset_name == "yelp/":
-        R_train_item_keyphrase = R_train_item_keyphrase.T
 
     for topk in topks:
         for lamb in lambs:
@@ -66,7 +70,7 @@ if __name__ == "__main__":
     # Commandline arguments
     parser = argparse.ArgumentParser(description="Latent Linear Critiquing")
 
-    parser.add_argument('--critiquing_model_name', dest='critiquing_model_name', default="LP1SumToOne",
+    parser.add_argument('--critiquing_model_name', dest='critiquing_model_name', default="llc_rank",
                         help='Critiquing model. (default: %(default)s)')
 
     parser.add_argument('--data_dir', dest='data_dir', default="data/beer/",
@@ -93,7 +97,7 @@ if __name__ == "__main__":
                         type=check_int_positive,
                         help='Number of users sampled in critiquing. (default: %(default)s)')
 
-    parser.add_argument('--test', dest='test_set', default="Rvalid.npz",
+    parser.add_argument('--test', dest='test_set', default="Rtest.npz",
                         help='Test set sparse matrix. (default: %(default)s)')
 
     parser.add_argument('--train', dest='train_set', default="Rtrain.npz",
@@ -105,7 +109,7 @@ if __name__ == "__main__":
     parser.add_argument('--train_item_keyphrase', dest='train_item_keyphrase_set', default="Rtrain_item_keyphrase.npz",
                         help='Train item keyphrase sparse matrix. (default: %(default)s)')
 
-    parser.add_argument('--keyphrase_selection_method', dest='keyphrase_selection_method', default="pop",
+    parser.add_argument('--keyphrase_selection_method', dest='keyphrase_selection_method', default="diff",
                         help='keyphrase_selection_method. (default: %(default)s)')
 
 

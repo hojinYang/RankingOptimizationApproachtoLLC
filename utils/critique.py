@@ -151,6 +151,8 @@ def LP1SimplifiedOptimize(initial_prediction_u, keyphrase_freq, affected_items, 
     critique_score = predict_scores(matrix_U=reg.predict(critiqued_vector.reshape(1, -1)),
                                     matrix_V=item_latent)
 
+
+
     new_prediction = initial_prediction_u + critique_score.flatten()
 
     return new_prediction, lambdas

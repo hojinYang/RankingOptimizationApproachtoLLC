@@ -167,9 +167,9 @@ class LP1Simplified(object):
 
     def get_initial_predictions(self):
         self.RQ, Yt, Bias = self.model(self.matrix_Train,
-                                       iteration=self.parameters_row['iter'].values[0],
-                                       lamb=self.parameters_row['lambda'].values[0],
-                                       rank=self.parameters_row['rank'].values[0])
+                                       iteration=self.parameters_row['iter'],
+                                       lamb=self.parameters_row['lambda'],
+                                       rank=self.parameters_row['rank'])
         self.Y = Yt.T
 
         self.reg = LinearRegression().fit(self.keyphrase_freq, self.RQ)

@@ -19,11 +19,12 @@ def critiquing(matrix_Train, matrix_Test, keyphrase_freq, dataset_name, model,
 
     row = {}
 
-    target_ranks = [1]
+    target_ranks = [10]
 
     # Randomly select test users
     np.random.seed(1201)
-    test_users = np.random.choice(num_users, num_users_sampled, replace=False)
+    # test_users = np.random.choice(num_users, num_users_sampled, replace=False)
+    test_users = np.random.choice(num_users, num_users, replace=False)
     
     critiquing_model = critiquing_models[critiquing_model_name](keyphrase_freq=keyphrase_freq,
                                                                 item_keyphrase_freq=item_keyphrase_freq,
